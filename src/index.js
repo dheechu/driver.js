@@ -13,6 +13,7 @@ import {
   RIGHT_KEY_CODE,
   SHOULD_ANIMATE_OVERLAY,
   SHOULD_OUTSIDE_CLICK_CLOSE,
+  SHOULD_CLICK_CLOSE_HIGHLIGHTED_AREA,
   SHOULD_OUTSIDE_CLICK_NEXT,
   ALLOW_KEYBOARD_CONTROL,
 } from './common/constants';
@@ -33,6 +34,7 @@ export default class Driver {
       padding: OVERLAY_PADDING,    // Spacing around the element from the overlay
       scrollIntoViewOptions: null, // Options to be passed to `scrollIntoView`
       allowClose: SHOULD_OUTSIDE_CLICK_CLOSE,      // Whether to close overlay on click outside the element
+      allowCloseOnHighlightedArea: SHOULD_CLICK_CLOSE_HIGHLIGHTED_AREA,      // Whether to close overlay on click inside the highlighted element
       keyboardControl: ALLOW_KEYBOARD_CONTROL,     // Whether to allow controlling through keyboard or not
       overlayClickNext: SHOULD_OUTSIDE_CLICK_NEXT, // Whether to move next on click outside the element
       stageBackground: '#ffffff',       // Background color for the stage
@@ -127,6 +129,11 @@ export default class Driver {
     // Perform the 'Next' operation when clicked outside the highlighted element
     if (!clickedHighlightedElement && !clickedPopover && this.options.overlayClickNext) {
       this.handleNext();
+      return;
+    }
+
+    if (clickedHighlightedElement && this.options.allowCloseOnHighlightedArea) {
+      this.reset();
       return;
     }
 
